@@ -7,7 +7,11 @@ class Scene1 extends Phaser.Scene {
     this.load.image("background1", "assets/images/background1.png");
     this.load.image("background2", "assets/images/background2.png");
 
-    
+    this.load.image("goku", "assets/images/goku.png");
+
+    this.load.image("cell", "assets/images/cell.png");
+    this.load.image("frieza", "assets/images/frieza.png");
+
     this.load.spritesheet("explosion", "assets/spritesheets/explosion.png",{
       frameWidth: 16,
       frameHeight: 16
@@ -19,13 +23,37 @@ class Scene1 extends Phaser.Scene {
     });
 
     this.load.bitmapFont("pixelFont", "assets/font/font.png", "assets/font/font.xml");
+
+  
   }
 
   create() {
     this.add.text(20, 20, "Loading game...");
     this.scene.start("playGame");
 
-   
+    const ctx = new AudioContext();
+    let audio;
+
+    fetch("assets/audio/dragonball_awake.mp3")
+    .then(data => data.arrayBuffer())
+    .then (arrayBuffer => ctx.decodeAudioData(arrayBuffer))
+    .then(decodedAudio => {
+      audio = decodedAudio;
+    });
+
+    function playblack(){
+
+      const playSound = ctx.createBufferSource();
+      playSound.buffer = audio;
+      playSound.connect(ctx.destination);
+      playSound.start(ctx.currentTime);
+      
+    }
+
+
+    window.addEventListener("click", playblack);
+    
+
     this.anims.create({
       key: "explode",
       frames: this.anims.generateFrameNumbers("explosion"),

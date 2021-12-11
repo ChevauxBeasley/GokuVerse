@@ -7,69 +7,50 @@ class Scene2 extends Phaser.Scene {
   create() {
     //geolocation to change the background depending on location
     // creat a variable for the background
-    if('geolocation' in navigator){
-      console.log("Geolocation avaliable")
+    
+      if('geolocation' in navigator){
+      console.log("Geolocation avaliable");
       navigator.geolocation.getCurrentPosition(position =>{
         const lat = position.coords.latitude;
         const lon = position.coords.longitude;
-    
-        document.getElementById('latitude').textContent = lat;
-        document.getElementById('longitude').textContent = lon;
+
+        const background1 = "background1";
+        const background2 = "background2";
+
+        if(lat == 39.29965755927547){
+          this.background = this.add.tileSprite(0, 0, config.width, config.height, background1);
+          this.background.setOrigin(0, 0);
+
+        }else{
+          this.background = this.add.tileSprite(0, 0, config.width, config.height, background2);
+          this.background.setOrigin(0, 0);
+        }
     
         console.log(position);
-    
       });
     }else{
       console.log("cannot locate user");
-    }
-    this.background = this.add.tileSprite(0, 0, config.width, config.height, "background");
-    this.background.setOrigin(0, 0);
-
-    this.ship1 = this.add.sprite(config.width / 2 - 50, config.height / 2, "ship");
-    this.ship2 = this.add.sprite(config.width / 2, config.height / 2, "ship2");
-    this.ship3 = this.add.sprite(config.width / 2 + 50, config.height / 2, "ship3");
+    } 
+   // this.background = this.add.tileSprite(0, 0, config.width, config.height, background1);
+   // this.background.setOrigin(0, 0);
+    
+    this.cell = this.add.image(config.width / 2 - 50, config.height / 2, "cell");
+    this.frieza = this.add.image(config.width / 2, config.height / 2, "frieza");
 
     this.enemies = this.physics.add.group();
-    this.enemies.add(this.ship1);
-    this.enemies.add(this.ship2);
-    this.enemies.add(this.ship3);
+    this.enemies.add(this.cell);
+    this.enemies.add(this.frieza);
 
-
-    this.ship1.play("ship1_anim");
-    this.ship2.play("ship2_anim");
-    this.ship3.play("ship3_anim");
-
-    this.ship1.setInteractive();
-    this.ship2.setInteractive();
-    this.ship3.setInteractive();
+    this.cell.setInteractive();
+    this.frieza.setInteractive();
 
     this.input.on('gameobjectdown', this.destroyShip, this);
 
     this.physics.world.setBoundsCollision();
 
-    this.powerUps = this.physics.add.group();
 
 
-    for (let i = 0; i < gameSettings.maxPowerups; i++) {
-      let powerUp = this.physics.add.sprite(16, 16, "power-up");
-      this.powerUps.add(powerUp);
-      powerUp.setRandomPosition(0, 0, game.config.width, game.config.height);
-
-      if (Math.random() > 0.5) {
-        powerUp.play("red");
-      } else {
-        powerUp.play("gray");
-      }
-
-      powerUp.setVelocity(gameSettings.powerUpVel, gameSettings.powerUpVel);
-      powerUp.setCollideWorldBounds(true);
-      powerUp.setBounce(1);
-
-    }
-
-
-    this.player = this.physics.add.sprite(config.width / 2 - 8, config.height - 64, "player");
-    this.player.play("thrust");
+    this.player = this.physics.add.sprite(config.width / 2 - 8, config.height - 64, "goku");
     this.cursorKeys = this.input.keyboard.createCursorKeys();
     this.player.setCollideWorldBounds(true);
 
@@ -83,7 +64,6 @@ class Scene2 extends Phaser.Scene {
       projectile.destroy();
     });
 
-    this.physics.add.overlap(this.player, this.powerUps, this.pickPowerUp, null, this);
 
     this.physics.add.overlap(this.player, this.enemies, this.hurtPlayer, null, this);
 
@@ -158,7 +138,7 @@ class Scene2 extends Phaser.Scene {
 
     projectile.destroy();
     this.resetShipPos(enemy);
-    this.score += 15;
+    this.score += 25;
 
      let scoreFormated = this.zeroPad(this.score, 6);
      this.scoreLabel.text = "SCORE " + scoreFormated;
@@ -180,12 +160,11 @@ class Scene2 extends Phaser.Scene {
 
 
 
-    this.moveShip(this.ship1, 1);
-    this.moveShip(this.ship2, 2);
-    this.moveShip(this.ship3, 3);
+    this.moveShip(this.cell, 1);
+    this.moveShip(this.frieza, 2);
     
 
-    this.background.tilePositionY -= 0.5;
+    //this.background.tilePositionY -= 0.5;
 
 
     this.movePlayerManager();
