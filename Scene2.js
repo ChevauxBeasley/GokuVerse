@@ -5,7 +5,23 @@ class Scene2 extends Phaser.Scene {
   }
 
   create() {
-
+    //geolocation to change the background depending on location
+    // creat a variable for the background
+    if('geolocation' in navigator){
+      console.log("Geolocation avaliable")
+      navigator.geolocation.getCurrentPosition(position =>{
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+    
+        document.getElementById('latitude').textContent = lat;
+        document.getElementById('longitude').textContent = lon;
+    
+        console.log(position);
+    
+      });
+    }else{
+      console.log("cannot locate user");
+    }
     this.background = this.add.tileSprite(0, 0, config.width, config.height, "background");
     this.background.setOrigin(0, 0);
 
