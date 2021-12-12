@@ -4,8 +4,25 @@ class Scene1 extends Phaser.Scene {
   }
 
   preload(){
-    this.load.image("background1", "assets/images/background1.png");
-    this.load.image("background2", "assets/images/background2.png");
+
+    if('geolocation' in navigator){
+      console.log("Geolocation avaliable");
+      navigator.geolocation.getCurrentPosition(position =>{
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+
+        if(lat > 40){
+          this.load.image("background1", "assets/images/background1.png");
+
+        }else{
+          this.load.image("background2", "assets/images/background2.png");
+        }
+    
+        console.log(position);
+      });
+    }else{
+      console.log("cannot locate user");
+    }
 
     this.load.image("goku", "assets/images/goku.png");
 

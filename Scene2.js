@@ -7,32 +7,12 @@ class Scene2 extends Phaser.Scene {
   create() {
     //geolocation to change the background depending on location
     // creat a variable for the background
+
     
-      if('geolocation' in navigator){
-      console.log("Geolocation avaliable");
-      navigator.geolocation.getCurrentPosition(position =>{
-        const lat = position.coords.latitude;
-        const lon = position.coords.longitude;
-
-        const background1 = "background1";
-        const background2 = "background2";
-
-        if(lat == 39.29965755927547){
-          this.background = this.add.tileSprite(0, 0, config.width, config.height, background1);
-          this.background.setOrigin(0, 0);
-
-        }else{
-          this.background = this.add.tileSprite(0, 0, config.width, config.height, background2);
-          this.background.setOrigin(0, 0);
-        }
+      
     
-        console.log(position);
-      });
-    }else{
-      console.log("cannot locate user");
-    } 
-   // this.background = this.add.tileSprite(0, 0, config.width, config.height, background1);
-   // this.background.setOrigin(0, 0);
+    this.background = this.add.tileSprite(0, 0, config.width, config.height, "background1");
+    this.background.setOrigin(0, 0);
     
     this.cell = this.add.image(config.width / 2 - 50, config.height / 2, "cell");
     this.frieza = this.add.image(config.width / 2, config.height / 2, "frieza");
@@ -164,7 +144,7 @@ class Scene2 extends Phaser.Scene {
     this.moveShip(this.frieza, 2);
     
 
-    //this.background.tilePositionY -= 0.5;
+    this.background.tilePositionY -= 0.5;
 
 
     this.movePlayerManager();
